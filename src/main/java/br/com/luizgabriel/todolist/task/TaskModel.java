@@ -9,14 +9,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-    //id
-    // usuarios(ID_USUARIO)
-    //Descrição
-    //Titulo
-    //Data de Inicio
-    //Data de Termino
-    //Prioridade
-
 @Data
 @Entity(name="tb_tasks")
 public class    TaskModel {
@@ -37,5 +29,10 @@ public class    TaskModel {
      @CreationTimestamp
      private LocalDateTime createdAt;
 
-
+    public void setTitle(String title) throws Exception {
+        if (title.length() > 50) {
+            throw new Exception("Ocampo title deve conter no máximo 50 caracteres");
+        }
+        this.title = title;
+    }
 }
