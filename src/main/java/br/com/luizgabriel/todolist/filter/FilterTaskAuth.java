@@ -20,21 +20,25 @@ public class FilterTaskAuth extends OncePerRequestFilter {
     private IUserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
-        //pegar a autenticação(usuario e senha)
-        var authorizaton = request.getHeader("Authorization");
+                var servletPath = request.getServletPath();
 
-        var authEncoded = authorizaton.substring("Basic".length()).trim();
+        if (servletPath.startsWith("/tasks/")) {
+            //pegar a autenticação(usuario e senha)
+            var authorizaton = request.getHeader("Authorization");
 
-        byte [] authDecode = Base64.getDecoder().decode(authEncoded);
+            var authEncoded = authorizaton.substring("Basic".length()).trim();
 
-        var authString = new String(authDecode);
+            byte [] authDecode = Base64.getDecoder().decode(authEncoded);
 
-        //["luizgabb", "123"]
-        String[] credentials = authString.split(":");
-        String username = credentials[0];
-        String password = credentials[1];
+            var authString = new String(authDecode);
+
+            //["luizgabb", "123"]
+            String[] credentials = authString.split(":");
+            String username = credentials[0];
+            String password = credentials[1];
 
             //validar usuario
             var user = this.userRepository.findByUsername(username);
@@ -44,13 +48,19 @@ public class FilterTaskAuth extends OncePerRequestFilter {
                 //validar senha
                 var passwordVerify = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
                 if (passwordVerify.verified) {
+                    //tudo ok
+                    request.setAttribute("idUser", user.getId());
                     filterChain.doFilter(request, response);
                 }else {
                     response.sendError(401);
                 }
-                //tudo ok
 
             }
+        }  else {
+            filterChain.doFilter(request, response);
+        }
+
+
 
     }
 }
