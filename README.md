@@ -17,25 +17,6 @@ Este projeto permite **criar, visualizar, atualizar e excluir tarefas**, além d
 
 ---
 
-## 📦 Estrutura do Projeto
-
-```text
-src/
-├── main/
-│   ├── java/com/todolist/
-│   │   ├── controller/         # Controladores REST
-│   │   ├── model/              # Entidades JPA
-│   │   ├── repository/         # Interfaces de repositório
-│   │   ├── service/            # Lógica de negócio
-│   │   └── TodoListApplication.java  # Classe principal
-│   └── resources/
-│       ├── application.properties    # Configurações
-│       └── import.sql         # Dados iniciais (opcional)
-└── test/                      # Testes unitários
-```
-
----
-
 ## ⚙️ Funcionalidades
 
 - ✅ Criar, visualizar, atualizar e excluir tarefas  
